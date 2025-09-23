@@ -1,0 +1,218 @@
+数据库
+	添加数据	insert into 表名(列名1,列名2,列名3) values(值1,值2,值3);
+	删除数据	delete from 表名 where 条件;
+	修改数据	update 表名 set 列名 = 值,列名 = 值 where 条件
+	数据查询	select 列名 from 表名 where 条件 
+java 操作数据库								(JDBC+C3P0+DBUtils[jar包]+C3P0配置文件)
+	JDBCUtils(自己编写)
+		public static DataSource ds = new ComboPooledDataSource()
+		public static Connection getconnection() throws SQLException {return ds.getConnection();} 
+		public static DataSource getDataSource() throws SQLException {return ds;} 
+	DBUtils(dao层应用)
+		DataSource dataSource = JDBCUtils.getDataSource();
+		QueryRunner qr = new QueryRunner(dataSource);
+		List<Contact> list = qr.query("select * from contact", new BeanListHandler<Contact>(Contact.class));
+		
+前端
+	html(标签)
+		<font color="cornflowerblue"></font>
+		<img src="2.jpg" width="120" height="120"/>
+		<a href="#"></a>
+		<form action="#" method="post">
+			用户名<input type="text" name="用户名" />
+			密码<input type="password" name="密码" />
+			
+			单选框<input type="radio" name="1" value="男"  checked="checked"/>男
+					<input type="radio" name="1" value="女"  />女 		
+			复选框<input type="checkbox" name="hobbies" value="cy" checked="checked"/>抽烟
+					<input type="checkbox" name="hobbies" value="hj"/>喝酒
+					<input type="checkbox" name="hobbies" value="tt"/>烫头
+			
+			隐藏<input type="hidden" />
+			普通按钮<input type="button" />
+			提交<input type="submit" />
+			
+			<select name="下拉选">
+				<option value="值1" selected="selected"></option>
+				<option value="值2"></option>
+				<option value="值3"></option>
+			</select>
+		</form>
+		
+	css(给html标签设置样式)		先写div ,css格式尽量设置在这, css格式尽量使用内嵌式,再写html 标签,进一步设置css格式	
+		<style type="text/css">
+			div{属性:属性值;属性:属性值;属性:属性值;}
+			.class值{属性:属性值;属性:属性值;}
+			
+		css样式/属性 (盒子模型)
+			border 边框					border: 5px  double/solid/dotted red;
+			width 宽度		
+			height 高度
+			margin 外边距
+			padding 内边距
+			background-color 背景色		background-color:red;
+			
+
+
+	bootstrip(前端框架)	
+		导入文件(css js font)
+		粘贴基本模板(修改依赖文件位置) 
+		建立自适应(响应式)的栅格系统(容器 行 格)
+			<div class="container">
+				<div class="row table-bordered">
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+					<div class="col-lg-1  col-md-1 col-sm-1">1</div>
+				</div>
+				<div class="row table-bordered">
+					<div class="col-lg-4 col-md-3  col-sm-6">4</div>
+					<div class="col-lg-4 col-md-3 hidden-sm">4</div>
+					<div class="col-lg-4 col-md-6  col-sm-6"">4</div>
+				</div>
+			</div>
+			
+			col-屏幕尺寸-offset-*	列偏移
+		复制官网代码 修改代码
+		
+web
+	Servlet	
+		ServletContext
+		Response				一些方法	
+		Request 
+
+	jsp		html+java   本质servlet
+		
+		EL表达式
+				${map.p3.password}
+				${pageContext.request.getContextPath}
+		jstl(导包)
+				<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+				
+				<c:if test="${num1 < num2}" var="n"></c:if>
+				<c:forEach items="${abc}" var="user" varStatus="st"></c:forEach>
+	
+	Cookie 	增删改查都用new
+				getName() 获取cookie的名称
+				getValue() 获取cookie的值
+				setMaxAge(int expiry) 设置cookie的生命周期
+				setPath(String uri) 设置cookie的有效携带路径
+	Session	
+			获取session: request.getSession();
+			session.setAttribute("name","value");
+			session.getAttribute("name");
+			session.removeAttribute("name")
+	
+	Filter
+	
+	JQuery(js框架)(导包)
+	
+		JS事件
+		onload
+		onsubmit
+		onclick
+		onchange
+		onfocus
+		onblur
+		onmouseover
+		onmouseout
+		
+		<script type ="text/javascript">
+	
+		js 与 jquery 转换
+			dom -> jquery	${dom对象}
+			jquery -> dom	$obj[0]		或者	$obj.get(0)
+			
+		选择器 (获取标签对象)
+			id选择器   	$("#id的值")
+			类选择器   	$(".class的属性值");
+			标签选择器  $("标签名") 
+			属性选择器	$("div[title='test']")
+			表单选择器	:text 
+						:password 
+			表单属性选择器	:checked	
+							:selected
+		jQuery插入对象	
+			$("<A></A>")					创建A元素对象
+			父元素.append(子元素element)		
+		jQuery删除对象
+			remove()	删除指定元素 (自杀删除,自己删除自己)
+			empty()		清空指定元素的所有子元素 (自己对象调用)		
+
+		对属性进行获取	设置	删除
+			jQuery对象.prop("名称")
+			jQuery对象.prop("名称","值")
+			jQuery对象.removeAttr("名称")
+			
+			.html("")		获取/设置标签体之间的文本(可以设置html)
+			.text("")  		获取/设置标签体之间的文本	
+			.val("")		获取/设置value属性的值	
+			
+		设置css样式			
+			直接设置css样式	
+				jQuery对象.css("name","value")	
+				
+			利用属性选择器设置css样式(对Class进行一些特有操作)
+					<style type="text/css">
+					.high{
+							font-weight:bold; 
+							background:red;
+						}
+						
+				$("p").addClass("high")		
+				$("p").removeClass("high");
+				$("p").toggleClass("high");		//没有变有,有变没有
+		页面加载	$(function(){})	
+		事件派发	$("#id").click(function(){xxx})
+		jQuery的遍历	$("li").each(function (index,element) {
+									alert(index  + " , "+ $(element).html());})
+		
+	jQuery的插件
+	jQuery Validation 插件(导包)
+		表单jQuery对象.validate({
+							rules:{
+								表单元素name值1:"规则1",
+								表单元素name值2:{规则名称：规则值,规则名称：规则值}
+								},
+								
+							messages:{
+								表单元素name值1："提示1",
+								表单元素name值2：{规则名称}
+								}
+						})
+	
+	
+	ajax(异步请求)
+		 $.get("/day17/Demo4Servlet",param,function(data){
+															alert(data);
+														},"text")
+	json(数据格式的一种)(导入Jackson包)
+		定义var jsonObj ={"name":"柳岩","age":30,"address":"湖南"}
+		获取jsonObj.address;
+		解析ObjectMapper om = new ObjectMapper();
+			String jsonStr = om.writeValueAsString(user); 
+		
+		
+
+
+
+
+
+
+
+
+
+
+	
+			
+		
+	
+	
