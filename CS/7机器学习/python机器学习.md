@@ -1,6 +1,8 @@
-https://www.bilibili.com/video/BV1Bq421A74G（差 异常检测，推荐算法，强化学习）
+scikit-learn：https://scikit-learn.org/stable/
 
-https://scikit-learn.org/stable/
+吴恩达机器学习视频：https://www.bilibili.com/video/BV1Bq421A74G（差3.1以后 异常检测，推荐算法，强化学习）
+
+吴恩达机器学习笔记：http://www.ai-start.com/ml2014
 
 
 
@@ -3716,6 +3718,152 @@ sklearn 中支持增量学习的算法：
                 sklearn.preprocessing.StandardScaler
                 sklearn.preprocessing.MinMaxScaler
                 sklearn.preprocessing.MaxAbsScaler
+```
+
+
+
+# 其他模型
+
+
+
+### 赋权法
+
+赋权法用于需要 确定权重系数的情况。分为主观赋权法和客观赋权法。
+
+熵权法 是客观赋权法的一种，层次分析法是主观赋权法的一种。
+
+
+
+#### 熵权法
+
+熵权法 计算  **信息熵**  来确定各个变量  **权重**  ，之后通过**变量和权重**可以计算出该条样本的  **评分**，用于挑选样本。
+
+推导过程：https://www.zhihu.com/question/357680646/answer/943628631
+
+```python
+import pandas as pd
+import numpy as np
+import math
+from numpy import array
+
+df = pd.read_csv('aaa.csv')
+
+#该方法要求x全为数值型
+def cal_weight(x):
+    x = x.apply(lambda x: ((x - np.min(x)) / (np.max(x) - np.min(x))))
+    # 求k
+    rows = x.index.size  # 行
+    cols = x.columns.size  # 列
+
+    k = 1.0 / math.log(rows)
+
+    lnf = [[None] * cols for i in range(rows)]
+    # 矩阵计算--
+    # 信息熵
+    # p=array(p)
+    x = array(x)
+    lnf = [[None] * cols for i in range(rows)]
+    lnf = array(lnf)
+
+    for i in range(0, rows):
+        for j in range(0, cols):
+            if x[i][j] == 0:
+                lnfij = 0.0
+            else:
+                p = x[i][j] / x.sum(axis=0)[j]
+                lnfij = math.log(p) * p * (-k)
+            lnf[i][j] = lnfij
+    lnf = pd.DataFrame(lnf)
+    E = lnf
+
+    # 计算冗余度
+    d = 1 - E.sum(axis=0)
+    # 计算各指标的权重
+    w = [[None] * 1 for i in range(cols)]
+    for j in range(0, cols):
+        wj = d[j] / sum(d)
+        w[j] = wj
+        # 计算各样本的综合得分,用最原始的数据
+
+    w = pd.DataFrame(w)
+    return w
+
+w = cal_weight(df)
+w.index = df.columns
+w.columns = ['weight']
+
+df['score'] = 0
+for i in df.columns:
+    if i != 'score':
+        df['score'] = df['score'] + df[i]*w.loc[i,'weight']
+
+# w 是每个特征的权重，df['score'] 是每条数据的得分
+```
+
+
+
+#### 层次分析法
+
+层次分析法本质上通过人的主观判断给变量不同的权重，然后再通过验证，最终确定权重。确定权重之后即可给每条数据打分。
+
+使用流程：https://blog.csdn.net/lengxiao1993/article/details/19575261
+
+```python
+import numpy as np
+import pandas as pd
+
+# # 需要人手动给出比较矩阵
+# compare_matrix = np.array([[1, 0.2, 0.33, 1],
+#                           [5, 1, 1.66, 5],
+#                           [3, 0.6, 1, 3],
+#                           [1, 0.2, 0.33, 1]])
+
+# # 一致性检验
+# def isConsist(F):
+#     n = np.shape(F)[0]
+#     a, b = np.linalg.eig(F)
+#     maxlam = a[0].real
+#     CI = (maxlam - n) / (n - 1)
+#     if CI < 0.1:
+#         return bool(1)
+#     else:
+#         return bool(0)
+# # 一致性检验异常
+# class isConsistError(Exception):
+#     def __init__(self, value):
+#         self.value = value
+
+#     def __str__(self):
+#         return repr(self.value)
+
+# if isConsist(compare_matrix) == False:
+#     raise isConsistError('一致性检验不通过')
+
+# # 根据相对矩阵，算出每一个影响因素的重要程度
+# def ReImpo(F):
+#     n = np.shape(F)[0]
+#     W = np.zeros([1, n])
+#     for i in range(n):
+#         t = 1
+#         for j in range(n):
+#             t = F[i, j] * t
+#         W[0, i] = t ** (1 / n)
+#     W = W / sum(W[0, :])  # 归一化 W=[0.874,2.467,0.464]
+#     return W.T
+# W = ReImpo(compare_matrix)
+
+
+# #此矩阵的每一行代表一个方案，每一列代表一个影响因素/此矩阵为方案层权重矩阵，大部分场景可以自动生成
+# df = pd.read_csv('entropy_weight.csv')
+
+# #归一化方案层权重矩阵
+# for i in df:
+#     df[i] = df[i]/sum(df[i])
+    
+    
+# score = np.dot(df,W)
+# score = pd.DataFrame(score)
+# print(score)
 ```
 
 
