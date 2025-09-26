@@ -2547,6 +2547,7 @@ XGBoost 为什么能实现并行训练？
 虽然整个 boosting 过程是串行的，但 XGBoost 在构建单棵树时对每个结点的最佳分裂点搜索采用了特征维度的并行计算。预先对各特征进行排序并存储为 block 结构，使得在查找最佳分裂点时，可以多线程同时计算各特征的分裂增益，从而大幅提升效率。
 
 
+
 ### 3、XGBooost
 
 官网：https://xgboost.readthedocs.io/en/latest/
